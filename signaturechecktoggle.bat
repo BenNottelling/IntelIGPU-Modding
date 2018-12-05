@@ -2,15 +2,27 @@
 setlocal
 title Driver Signature Enforcmant Toggle
 
-:PROMPT
-SET /P AREYOUSURE=Would you like to enable or disable Driver Signature Enforcmant Toggle? (E/[D])?
-IF /I "%AREYOUSURE%" NEQ "E" GOTO enable
-bcdedit.exe /set nointegritychecks on REM disable it
+echo Options
+echo 1: Enable Driver Signature Enforcmant Toggle
+echo 2: Disable Driver Signature Enforcmant Toggle
+SET /P pick=Pick your option: 
+goto %pick%
 
+
+
+:1
+bcdedit.exe /set nointegritychecks off REM enable it
+echo press any key to close
+pause >nul
 exit
 echo If I don't close, please close me
 pause
 
-:enable
-bcdedit.exe /set nointegritychecks off REM enable it
+:2
+bcdedit.exe /set nointegritychecks on REM disable it
 endlocal
+echo press any key to close
+pause >nul
+exit
+echo If I don't close, please close me
+pause
