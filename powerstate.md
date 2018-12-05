@@ -1,17 +1,21 @@
-# These are the powerstate ID's as seen within the graphics INF file.
+# This is the default powerstate config as seen within the graphics INF file.
 
-GUID_MAX_POWER_SAVINGS = "{a1841308-3541-4fab-bc81-f71556f20b4a}"
+Value = 0, %Maximum_Battery_Life%, %Maximum_Battery%, %REG_DWORD%, 0
+Value = 1, %Balanced%, %Balanced%, %REG_DWORD%, 1
+Value = 2, %Maximum_Performance%, %Maximum_Performance%, %REG_DWORD%, 2
 
-GUID_TYPICAL_POWER_SAVINGS = "{381b4222-f694-41f0-9685-ff5bb260df2e}"
+Default = %GUID_MAX_POWER_SAVINGS%, %AC%, 0
+Default = %GUID_MAX_POWER_SAVINGS%, %DC%, 0
+Default = %GUID_TYPICAL_POWER_SAVINGS%, %AC%, 1
+Default = %GUID_TYPICAL_POWER_SAVINGS%, %DC%, 1
+Default = %GUID_MIN_POWER_SAVINGS%, %AC%, 2
+Default = %GUID_MIN_POWER_SAVINGS%, %DC%, 2
 
-GUID_MIN_POWER_SAVINGS = "{8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c}"
+Value **0** is going to be your worst perfoming setting, **1** is in the middle, and **2** should perform best, so, this change should give the best performance at all levels:
 
-
-These names sugest that **{8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c}** would be ideal for the highest performance (minimum power saving)
-So, it's untested, but this would likely be ideal for performance (sets the drivers in maximum performace out of the box):
-
-GUID_MAX_POWER_SAVINGS = "{8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c}"
-
-GUID_TYPICAL_POWER_SAVINGS = "{8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c}"
-
-GUID_MIN_POWER_SAVINGS = "{8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c}"
+Default = %GUID_MAX_POWER_SAVINGS%, %AC%, 2
+Default = %GUID_MAX_POWER_SAVINGS%, %DC%, 2
+Default = %GUID_TYPICAL_POWER_SAVINGS%, %AC%, 2
+Default = %GUID_TYPICAL_POWER_SAVINGS%, %DC%, 2
+Default = %GUID_MIN_POWER_SAVINGS%, %AC%, 2
+Default = %GUID_MIN_POWER_SAVINGS%, %DC%, 2
