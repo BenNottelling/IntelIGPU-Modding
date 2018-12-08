@@ -1,5 +1,4 @@
-# Intel iGPU driver modding
-This database is for modding Intel drivers to get the highest performance out of a iGPU as possible. 
-It'll likely never have any modded drivers here, and simply act as a resource for those who wish to mod their drivers. 
+# iGPU AutoMod
+A small tool to mod iGPU graphics drivers for maximum performance. GitHub repository is a mess that will be cleaned up, instructions are on the website 
 
-https://en.wikichip.org/wiki/WikiChip
+http://igpumods.weebly.com/
