@@ -5,6 +5,7 @@ if(Test-Path '\Graphics\igdlh64.inf' -PathType Leaf) { $inffile = '\Graphics\igd
 
 #If we can't find the inf file then promt for it
 if(!$inffile) {$inffile = Read-Host -Prompt 'Please drag your driver INF file here and press enter'}
+$inffile = $inffile.Replace('"',"")
 
 #Mark this file as modded by iGPU AutoMod
 (gc $inffile).replace('INF for the Intel Corporation graphics adapter.', 'INF for the Intel Corporation graphics adapter, modded by iGPU AutoMod') | Set-Content $inffile
