@@ -35,7 +35,7 @@ echo "`n `nChanged to maximum power configuration"
 echo "`nMaximumDeviceMemoryConfiguration = 512 --> 1024"
 
 #Optimizations Found in Drivers
-#(gc $inffile) -replace 'HKR,, ForcePLLDisableEnableForFreqChange, %REG_DWORD%, 0x0', 'HKR,, ForcePLLDisableEnableForFreqChange, %REG_DWORD%, 0x1' | Out-File $inffile #TBH I'm not sure what this one does
+#(gc $inffile) -replace 'HKR,, ForcePLLDisableEnableForFreqChange, %REG_DWORD%, 0x0', 'HKR,, ForcePLLDisableEnableForFreqChange, %REG_DWORD%, 0x1' | Out-File $inffile #Causes a failed driver install on my laptop. Desktop needs testing
 #(gc $inffile) -replace 'HKR,, NoFastLinkTrainingForeDP, %REG_DWORD%, 1', 'HKR,, NoFastLinkTrainingForeDP, %REG_DWORD%, 0' | Out-File $inffile #I don't have DisplayPort on any of my deviced with an Intel iGPU to test this, if someone does, please do.
 echo "`nEnabled optimizations found in drivers"
 
@@ -45,9 +45,6 @@ echo "`nEnabled optimizations found in drivers"
 (gc $inffile) -replace 'HKR,, AdaptiveVsyncEnable,%REG_DWORD%, 1', 'HKR,, AdaptiveVsyncEnable,%REG_DWORD%, 0' | Out-File $inffile
 
 echo "`nMade changes from PHDGD drivers"
-
-echo "`nCompleted all mods, exit this window and install the new drivers"
-
 
 #Check if we can find the inf file for the CUI (Common User Interface)
 if (Test-Path '.\Graphics\cui_dch.inf' -PathType Leaf) {
@@ -70,5 +67,30 @@ if ($decision -eq 0) {
   echo "`n `nSkipped CUI mods"
 }
 }
+
+#Check if the user is OK with device ID modifications
+if (Test-Path '.\Graphics\cui_dch.inf' -PathType Leaf) {
+
+#Ask the user if they are okay with user-interface mods
+$message  = 'Modify device IDs?'
+$question = 'We can modify the device ID strings to help provide a FPS boost on some devices, would you like to continue? Note: This change may reset your graphics settings'
+
+$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+if ($decision -eq 0) {
+  #Change IDs
+  (gc $inffile) -replace ' HD Graphics', ' UHD Graphics' | Out-File $inffile
+  (gc $inffile) -replace '520', '630' | Out-File $inffile
+  (gc $inffile) -replace '530', '630' | Out-File $inffile
+  (gc $inffile) -replace '620', '630' | Out-File $inffile
+  echo "`n `nModified the device ID strings modifications"
+} else {
+  echo "`n `nSkipped the device ID strings modifications"
+}
+}
+
 echo "`nCompleted all modification. Feel free to close this and install the drivers"
 pause

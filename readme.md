@@ -10,5 +10,5 @@ A small tool to mod iGPU graphics drivers for maximum performance. GitHub reposi
  - Disable adaptive V-SYNC to "improve performance on games" (found in IntelliModder32's [TENSOR™ Driver](https://imo32.weebly.com))
  - Hides the optimal resolution notification when you play non-native resolutions (I find this annoying)
  - Hides promotions in the graphics panel (Why do we need ads on something we paid for)
-
+ - Can modify the device ID strings to help provide a performance improvement
 Official website: http://igpumods.weebly.com/
