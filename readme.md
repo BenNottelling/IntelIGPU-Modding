@@ -3,6 +3,7 @@ A small tool to mod iGPU graphics drivers for maximum performance. GitHub reposi
 
 ## Supported Hardware
  - Currently only Intel iGPUs are supported (CPU Generation 6-9, EG i5 6600K - i5 9600k, not limited to i5 only)
+ - **PLEASE** - Only use only pre-dch driver releases! They are SHIT for modding and even at stock will result in less performance than your hardware is capable of! Download the [Latest Official Pre-DCH Driver](https://downloadcenter.intel.com/download/27199/Intel-Graphics-Driver-for-Windows-15-47-?product=126789) or [TENSOR™ Driver (Currently Pre-DCH)](https://imo32.weebly.com)
 
 ## What Does it Change?
  - Forces maximum power configuration (Laptop users should see a difference here)

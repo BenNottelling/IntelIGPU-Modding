@@ -69,7 +69,7 @@ if ($decision -eq 0) {
 }
 
 #Check if the user is OK with device ID modifications
-if (Test-Path '.\Graphics\cui_dch.inf' -PathType Leaf) {
+if (Test-Path '.\Graphics\igdlh64.inf' -PathType Leaf) {
 
 #Ask the user if they are okay with user-interface mods
 $message  = 'Modify device IDs?'
