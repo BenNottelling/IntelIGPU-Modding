@@ -7,9 +7,18 @@ if (Test-Path '.\Graphics\igdlh64.inf' -PathType Leaf) { $inffile = '.\Graphics\
 if (!$inffile) {$inffile = Read-Host -Prompt 'Please drag your driver INF file here and press enter'}
 $inffile = $inffile.Replace('"',"")
 
+#Mark this file as modded by iGPU AutoMod
+(gc $inffile).replace('INF for the Intel Corporation graphics adapter.', 'INF for the Intel Corporation graphics adapter, modified by iGPU AutoMod') | Set-Content -Encoding UTF8 $inffile
+(gc $inffile).replace('Intel         = "Intel Corporation"', 'Intel         = "Intel Corporation with iGPU AutoMod"') | Set-Content -Encoding UTF8 $inffile
+
+(gc $inffile) -replace '  ', '' | Out-File $inffile
+(gc $inffile) -replace ' 	', '' | Out-File $inffile
+
+echo "`nMarked file as modified by iGPU AutoMod"
+
 #Ask if the user is happy with a power plan override
 $message  = 'User input needed'
-$question = 'Force change power plan to maximum performace?'
+$question = 'Force change power plan to maximum performace? (On DC power only)'
 
 $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
@@ -18,17 +27,14 @@ $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentL
 $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 if ($decision -eq 0) {
   #Maximium Power Plan
-(gc $inffile) -replace '%AC%, 1', '%AC%, 2' | Out-File $inffile
-(gc $inffile) -replace '%AC%, 0', '%AC%, 2' | Out-File $inffile
+(gc $inffile) -replace '%AC%, 1', '%AC%, 1' | Out-File $inffile
+(gc $inffile) -replace '%AC%, 0', '%AC%, 1' | Out-File $inffile
 (gc $inffile) -replace '%DC%, 1', '%DC%, 2' | Out-File $inffile
 (gc $inffile) -replace '%DC%, 0', '%DC%, 2' | Out-File $inffile
 echo "`n `nChanged to maximum power configuration"
 } else {
   echo "`n `nKept default power configuration"
 }
-
-#Mark this file as modded by iGPU AutoMod
-(gc $inffile).replace('INF for the Intel Corporation graphics adapter.', 'INF for the Intel Corporation graphics adapter, modified by iGPU AutoMod') | Set-Content $inffile
 
 #Change max mem config
 (gc $inffile) -replace 'MaximumDeviceMemoryConfiguration = 512', 'MaximumDeviceMemoryConfiguration = 1024' | Out-File $inffile
@@ -40,9 +46,12 @@ echo "`nMaximumDeviceMemoryConfiguration = 512 --> 1024"
 echo "`nEnabled optimizations found in drivers"
 
 #Stolen from PHDGD drivers
-#(gc $inffile) -replace 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 0', 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 1' | Out-File $inffile
+$string = ('HKR,, IncreaseFixedSegment,%REG_DWORD%, 0; 0 - disabled, 1- enabled' + "`n" + 'HKR,, Display1_PipeOptimizationEnable,%REG_DWORD%, 1')
+(gc $inffile) -replace 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 0', $string | Out-File $inffile
 #(gc $inffile) -replace 'HKR,, TotalStaticModes, %REG_DWORD%, 2', 'HKR,, TotalStaticModes, %REG_DWORD%,0' | Out-File $inffile
 (gc $inffile) -replace 'HKR,, AdaptiveVsyncEnable,%REG_DWORD%, 1', 'HKR,, AdaptiveVsyncEnable,%REG_DWORD%, 0' | Out-File $inffile
+(gc $inffile) -replace 'HKR,, Disable_OverlayDSQualityEnhancement,  %REG_DWORD%,     0', 'HKR,, Disable_OverlayDSQualityEnhancement,  %REG_DWORD%, 1' | Out-File $inffile
+
 
 echo "`nMade changes from PHDGD drivers"
 
