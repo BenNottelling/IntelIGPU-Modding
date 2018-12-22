@@ -10,6 +10,10 @@ $inffile = $inffile.Replace('"',"")
 #Mark this file as modded by iGPU AutoMod
 (gc $inffile).replace('INF for the Intel Corporation graphics adapter.', 'INF for the Intel Corporation graphics adapter, modified by iGPU AutoMod') | Set-Content -Encoding UTF8 $inffile
 (gc $inffile).replace('Intel         = "Intel Corporation"', 'Intel         = "Intel Corporation with iGPU AutoMod"') | Set-Content -Encoding UTF8 $inffile
+
+(gc $inffile) -replace '  ', '' | Out-File $inffile
+(gc $inffile) -replace ' 	', '' | Out-File $inffile
+
 echo "`nMarked file as modified by iGPU AutoMod"
 
 #Ask if the user is happy with a power plan override
@@ -42,9 +46,8 @@ echo "`nMaximumDeviceMemoryConfiguration = 512 --> 1024"
 echo "`nEnabled optimizations found in drivers"
 
 #Stolen from PHDGD drivers
-$string = ('HKR,, IncreaseFixedSegment,%REG_DWORD%, 0;' + "`n" + 'HKR,, Display1_PipeOptimizationEnable,%REG_DWORD%, 1;')
-(gc '.\Graphics\cui_dch.inf') -replace 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 0;', $string | Out-File '.\Graphics\cui_dch.inf'
-#(gc $inffile) -replace 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 0', 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 1' | Out-File $inffile
+$string = ('HKR,, IncreaseFixedSegment,%REG_DWORD%, 0; 0 - disabled, 1- enabled' + "`n" + 'HKR,, Display1_PipeOptimizationEnable,%REG_DWORD%, 1')
+(gc $inffile) -replace 'HKR,, IncreaseFixedSegment,%REG_DWORD%, 0', $string | Out-File $inffile
 #(gc $inffile) -replace 'HKR,, TotalStaticModes, %REG_DWORD%, 2', 'HKR,, TotalStaticModes, %REG_DWORD%,0' | Out-File $inffile
 (gc $inffile) -replace 'HKR,, AdaptiveVsyncEnable,%REG_DWORD%, 1', 'HKR,, AdaptiveVsyncEnable,%REG_DWORD%, 0' | Out-File $inffile
 (gc $inffile) -replace 'HKR,, Disable_OverlayDSQualityEnhancement,  %REG_DWORD%,     0', 'HKR,, Disable_OverlayDSQualityEnhancement,  %REG_DWORD%, 1' | Out-File $inffile
