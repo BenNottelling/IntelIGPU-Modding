@@ -1,3 +1,4 @@
+@echo off
 rem Disable Error Reporting
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
 
@@ -33,3 +34,8 @@ rem dism /online /norestart /disable-feature /featurename:Internet-Explorer-Opti
 
 rem Enable Ultimate Performance Plan
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+powercfg.cpl
+
+echo Done! Feel free to enable the 'Ultimate Performance Plan' from within your power settings
+echo Feel free to close this window
+pause >nul 
